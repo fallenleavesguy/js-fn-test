@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { shuffle, searchTree, commafy } from './utils.js';
+import { shuffle, searchTree, commafy, commafy2 } from './utils.js';
 
 describe('shuffle', () => {
   it('应该返回一个新数组', () => {
@@ -74,5 +74,33 @@ describe('commafy', () => {
     expect(commafy('')).toBe('');
     expect(commafy(null)).toBe('');
     expect(commafy(undefined)).toBe('');
+  });
+});
+
+describe('commafy2', () => {
+  // it.only('应该正确格式化整数', () => {
+  it('应该正确格式化整数', () => {
+    expect(commafy2(1234)).toBe('1,234');
+    expect(commafy2(1234567)).toBe('1,234,567');
+    expect(commafy2(123)).toBe('123');
+    expect(commafy2(1)).toBe('1');
+  });
+
+  it('应该正确格式化小数', () => {
+    expect(commafy2(1234.56)).toBe('1,234.56');
+    expect(commafy2(1234567.89)).toBe('1,234,567.89');
+    expect(commafy2(0.123)).toBe('0.123');
+  });
+
+  it('应该处理边界情况', () => {
+    expect(commafy2(0)).toBe('0');
+    expect(commafy2('')).toBe('');
+    expect(commafy2(null)).toBe('');
+    expect(commafy2(undefined)).toBe('');
+  });
+
+  it('应该处理大数字', () => {
+    expect(commafy2(1234567890)).toBe('1,234,567,890');
+    expect(commafy2('1234567890.123456')).toBe('1,234,567,890.123456');
   });
 }); 

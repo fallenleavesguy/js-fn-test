@@ -64,6 +64,7 @@ export function commafy(num) {
   const integerPart = parts[0];
   const decimalPart = parts[1];
   
+  // 把符合条件的单词边界换成,号
   // 正则表达式解析：虽然正则是从左向右匹配，但通过巧妙的设计实现了从右向左添加逗号
   // 1. \B: 匹配非单词边界。这确保不会在数字最开始添加逗号
   // 2. (?=pattern): 正向前瞻，匹配一个位置，这个位置后面的内容要匹配pattern
@@ -79,4 +80,36 @@ export function commafy(num) {
   const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   
   return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+}
+
+/**
+ * 数字千分位格式化（不使用正则表达式的实现）
+ * 从右向左每三位添加一个逗号
+ * @param {number|string} num 要格式化的数字
+ * @returns {string} 格式化后的字符串
+ */
+export function commafy2(num) {
+  if (num === null || num === undefined) return '';
+  
+  const str = num.toString();
+  const parts = str.split('.');
+  const integerPart = parts[0];
+  const decimalPart = parts[1];
+  
+  // 处理整数部分
+  const digits = integerPart.split('');
+  const len = digits.length;
+  let result = '';
+  
+  // 从右向左遍历，每3位添加一个逗号
+  for (let i = len - 1; i >= 0; i--) {
+    // 在当前数字前面加逗号：从右往左数，除了最后一位，每3位前面加逗号
+    if ((len - 1 - i) % 3 === 0 && i !== len - 1) {
+      console.log('i: ', i, 'digits[i]: ', digits[i], 'suffix: ', result);
+      result = ',' + result;
+    }
+    result = digits[i] + result;
+  }
+  
+  return decimalPart ? `${result}.${decimalPart}` : result;
 } 
